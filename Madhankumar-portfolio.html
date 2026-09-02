@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Madhankumar A — Backend & Cloud Engineer</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap');
+
+  :root {
+    --bg: #0a0e13;
+    --surface: #11161d;
+    --surface-2: #161d26;
+    --line: #232b36;
+    --line-soft: #1a2129;
+    --text: #e6ebf1;
+    --text-dim: #8b98a8;
+    --text-dimmer: #5a6675;
+    --teal: #4fd1c5;
+    --teal-dim: #2d5f5a;
+    --amber: #f0a868;
+    --amber-dim: #6b5232;
+    --radius: 3px;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'Space Grotesk', sans-serif;
+    --body: 'Inter', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--body);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--line-soft) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line-soft) 1px, transparent 1px);
+    background-size: 64px 64px;
+    opacity: 0.35;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 32px; position: relative; z-index: 1; }
+
+  /* ---------- Nav ---------- */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(10,14,19,0.85);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-inner {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 16px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .nav-brand {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--teal);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .nav-brand .dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--teal);
+    box-shadow: 0 0 8px var(--teal);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+  .nav-links {
+    display: flex;
+    gap: 28px;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: var(--text-dim);
+  }
+  .nav-links a { color: inherit; text-decoration: none; transition: color 0.2s; }
+  .nav-links a:hover, .nav-links a:focus-visible { color: var(--teal); }
+  .nav-links .idx { color: var(--text-dimmer); }
+
+  @media (max-width: 640px) {
+    .nav-links { display: none; }
+  }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding-top: 90px;
+    padding-bottom: 60px;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 48px;
+    align-items: center;
+    width: 100%;
+  }
+  .hero-grid-solo {
+    grid-template-columns: 1fr;
+    max-width: 640px;
+  }
+  @media (max-width: 880px) {
+    .hero-grid { grid-template-columns: 1fr; }
+  }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: var(--teal);
+    letter-spacing: 0.04em;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .eyebrow::before { content: '//'; color: var(--text-dimmer); }
+  h1 {
+    font-family: var(--sans);
+    font-size: clamp(2.4rem, 5vw, 3.6rem);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+  }
+  h1 .wave { display: inline-block; animation: wave 2.4s ease-in-out infinite; transform-origin: 70% 70%; }
+  @keyframes wave {
+    0%, 100% { transform: rotate(0deg); }
+    10% { transform: rotate(14deg); }
+    20% { transform: rotate(-8deg); }
+    30% { transform: rotate(14deg); }
+    40% { transform: rotate(-4deg); }
+    50% { transform: rotate(10deg); }
+    60%, 100% { transform: rotate(0deg); }
+  }
+  .hero-role {
+    font-family: var(--sans);
+    font-size: 1.15rem;
+    color: var(--text-dim);
+    font-weight: 500;
+    margin-bottom: 20px;
+  }
+  .hero-desc {
+    font-size: 1rem;
+    color: var(--text-dim);
+    max-width: 46ch;
+    margin-bottom: 28px;
+  }
+  .hero-desc strong { color: var(--text); font-weight: 500; }
+
+  .hero-cta {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    font-family: var(--mono);
+    font-size: 13px;
+    padding: 12px 20px;
+    border-radius: var(--radius);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+    border: 1px solid transparent;
+  }
+  .btn-primary {
+    background: var(--teal);
+    color: #05100f;
+    font-weight: 600;
+  }
+  .btn-primary:hover { background: #6ee0d5; transform: translateY(-1px); }
+  .btn-ghost {
+    border-color: var(--line);
+    color: var(--text-dim);
+  }
+  .btn-ghost:hover { border-color: var(--teal-dim); color: var(--text); }
+
+  /* ---------- shared small panel head (used by case-study diagram) ---------- */
+  .lb-panel-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dimmer);
+  }
+  .lb-panel-head .status {
+    color: var(--teal);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .lb-panel-head .status .d { width: 6px; height: 6px; border-radius: 50%; background: var(--teal); }
+
+  /* ---------- Sections generic ---------- */
+  section { padding: 100px 0; border-top: 1px solid var(--line-soft); }
+  .section-head { margin-bottom: 48px; }
+  .section-eyebrow {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--amber);
+    margin-bottom: 10px;
+  }
+  .section-eyebrow::before { content: '// '; color: var(--text-dimmer); }
+  h2 {
+    font-family: var(--sans);
+    font-size: clamp(1.6rem, 3vw, 2.1rem);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  /* ---------- About ---------- */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 48px;
+  }
+  @media (max-width: 800px) { .about-grid { grid-template-columns: 1fr; } }
+  .about-text p { color: var(--text-dim); margin-bottom: 16px; max-width: 58ch; }
+  .about-text strong { color: var(--text); font-weight: 500; }
+  .stat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .stat {
+    background: var(--surface);
+    padding: 22px 20px;
+  }
+  .stat-val {
+    font-family: var(--mono);
+    font-size: 1.5rem;
+    color: var(--teal);
+    font-weight: 600;
+  }
+  .stat-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dimmer);
+    margin-top: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  /* ---------- Experience: git-log timeline ---------- */
+  .commit-log {
+    border-left: 1px solid var(--line);
+    margin-left: 6px;
+  }
+  .commit {
+    position: relative;
+    padding: 0 0 44px 32px;
+  }
+  .commit:last-child { padding-bottom: 0; }
+  .commit::before {
+    content: '';
+    position: absolute;
+    left: -5.5px;
+    top: 4px;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 2px solid var(--teal);
+  }
+  .commit-meta {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--text-dimmer);
+    margin-bottom: 6px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .commit-meta .hash { color: var(--amber); }
+  .commit-title {
+    font-family: var(--sans);
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .commit-org {
+    font-size: 0.9rem;
+    color: var(--text-dim);
+    margin-bottom: 14px;
+  }
+  .commit-body {
+    list-style: none;
+  }
+  .commit-body li {
+    color: var(--text-dim);
+    font-size: 0.93rem;
+    padding-left: 18px;
+    position: relative;
+    margin-bottom: 9px;
+  }
+  .commit-body li::before {
+    content: '+';
+    position: absolute;
+    left: 0;
+    color: var(--teal-dim);
+    font-family: var(--mono);
+  }
+  .commit-body li strong { color: var(--text); font-weight: 500; }
+  .tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+  .tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    border: 1px solid var(--line);
+    padding: 4px 10px;
+    border-radius: 20px;
+  }
+
+  /* ---------- Stack panels ---------- */
+  .panel-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  @media (max-width: 800px) { .panel-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 520px) { .panel-grid { grid-template-columns: 1fr; } }
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    padding: 22px;
+    transition: border-color 0.2s;
+  }
+  .panel:hover { border-color: var(--teal-dim); }
+  .panel-title {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--amber);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    margin-bottom: 14px;
+  }
+  .panel ul { list-style: none; }
+  .panel li {
+    font-size: 0.92rem;
+    color: var(--text-dim);
+    padding: 5px 0;
+  }
+
+  /* ---------- Projects ---------- */
+  .project-list { display: flex; flex-direction: column; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 5px; overflow: hidden; }
+  .project {
+    background: var(--surface);
+    padding: 28px;
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    gap: 20px;
+  }
+  @media (max-width: 640px) { .project { grid-template-columns: 1fr; } }
+  .project-num {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-dimmer);
+    padding-top: 3px;
+  }
+  .project-title {
+    font-family: var(--sans);
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .project-desc { color: var(--text-dim); font-size: 0.93rem; max-width: 68ch; margin-bottom: 14px; }
+
+  .case-grid {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 28px;
+    margin-bottom: 16px;
+  }
+  @media (max-width: 760px) { .case-grid { grid-template-columns: 1fr; } }
+  .case-label {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    color: var(--amber);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+    margin-top: 16px;
+  }
+  .case-label:first-child { margin-top: 0; }
+  .case-text { color: var(--text-dim); font-size: 0.9rem; }
+  .case-diagram-wrap {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    padding: 14px 16px;
+    align-self: start;
+  }
+
+  /* ---------- Approach ---------- */
+  .approach-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  @media (max-width: 900px) { .approach-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 520px) { .approach-grid { grid-template-columns: 1fr; } }
+  .approach-card {
+    background: var(--surface);
+    padding: 24px 18px;
+  }
+  .approach-icon { color: var(--teal); font-family: var(--mono); font-size: 11px; margin-bottom: 10px; }
+  .approach-title { font-family: var(--sans); font-weight: 600; margin-bottom: 8px; font-size: 0.98rem; }
+  .approach-desc { color: var(--text-dim); font-size: 0.85rem; }
+
+  /* ---------- Exploring / Education ---------- */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
+  @media (max-width: 800px) { .two-col { grid-template-columns: 1fr; } }
+  .chip-row { display: flex; flex-wrap: wrap; gap: 10px; }
+  .chip {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--teal);
+    background: rgba(79,209,197,0.07);
+    border: 1px solid var(--teal-dim);
+    padding: 6px 12px;
+    border-radius: var(--radius);
+  }
+  .edu-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    padding: 24px;
+  }
+  .edu-degree { font-family: var(--sans); font-weight: 600; font-size: 1.05rem; margin-bottom: 4px; }
+  .edu-school { color: var(--text-dim); font-size: 0.92rem; margin-bottom: 14px; }
+  .edu-meta { display: flex; gap: 24px; font-family: var(--mono); font-size: 11.5px; color: var(--text-dimmer); }
+  .edu-meta span strong { color: var(--teal); }
+
+  /* ---------- Contact / footer ---------- */
+  .contact-section { text-align: center; padding: 110px 0 60px; }
+  .contact-section h2 { margin-bottom: 16px; }
+  .contact-section p { color: var(--text-dim); max-width: 46ch; margin: 0 auto 32px; }
+  .contact-links { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
+  footer {
+    border-top: 1px solid var(--line-soft);
+    padding: 24px 0;
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--text-dimmer);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  /* ---------- Reveal on scroll ---------- */
+  .reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .reveal.in { opacity: 1; transform: translateY(0); }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+    .reveal { opacity: 1; transform: none; }
+  }
+
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="nav-brand"><span class="dot"></span> madhankumar.a</div>
+    <div class="nav-links">
+      <a href="#about"><span class="idx">01</span> about</a>
+      <a href="#experience"><span class="idx">02</span> experience</a>
+      <a href="#stack"><span class="idx">03</span> stack</a>
+      <a href="#projects"><span class="idx">04</span> projects</a>
+      <a href="#contact"><span class="idx">05</span> connect</a>
+      <a href="Madhankumar_A_Resume.pdf" download style="color: var(--teal);">résumé ↓</a>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <!-- HERO -->
+  <section class="hero" style="border-top:none;">
+    <div class="hero-grid hero-grid-solo">
+      <div>
+        <div class="eyebrow">status: open to opportunities</div>
+        <h1>Hi, I'm Madhankumar A <span class="wave">👋</span></h1>
+        <div class="hero-role">Backend &amp; Cloud Engineer — Distributed Systems, OpenStack, Kubernetes</div>
+        <p class="hero-desc">
+          I build <strong>production backend services and cloud infrastructure</strong> —
+          from Go-based control-plane APIs to the load balancers that keep traffic moving.
+          Nearly <strong>2.5 years</strong> across product engineering and freelance.
+        </p>
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="#experience">View experience →</a>
+          <a class="btn btn-ghost" href="mailto:madhanannadurai536@gmail.com">Get in touch</a>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="reveal">
+    <div class="section-head">
+      <div class="section-eyebrow">about</div>
+      <h2>What I actually do all day</h2>
+    </div>
+    <div class="about-grid">
+      <div class="about-text">
+        <p>I'm a backend and cloud engineer working mostly below the application layer — the
+        systems that keep other services running. That means <strong>Go and Python backend
+        services</strong>, <strong>OpenStack Octavia/Nova</strong> control-plane and data-plane
+        work, and <strong>Kubernetes</strong>-based deployments.</p>
+        <p>Day to day, that looks like debugging why a load balancer's database state drifted
+        from its actual infrastructure, building the API that returns amphora health, or writing
+        the internal dashboard someone on my team needed at 11pm during an incident.</p>
+        <p>I like understanding systems end-to-end — from a request landing on a listener,
+        through certificate validation, to which backend node ends up handling it. Lately I've
+        also been building small AI-agent side projects on top of local LLMs, mostly to see how
+        the same reliability thinking applies outside infra.</p>
+      </div>
+      <div class="stat-grid">
+        <div class="stat"><div class="stat-val">2.5</div><div class="stat-label">years experience</div></div>
+        <div class="stat"><div class="stat-val">~40%</div><div class="stat-label">investigation time cut</div></div>
+        <div class="stat"><div class="stat-val">20</div><div class="stat-label">parallel workers, inventory tool</div></div>
+        <div class="stat"><div class="stat-val">4</div><div class="stat-label">CRM modules shipped freelance</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience" class="reveal">
+    <div class="section-head">
+      <div class="section-eyebrow">experience</div>
+      <h2>git log --author=madhankumar</h2>
+    </div>
+    <div class="commit-log">
+      <div class="commit">
+        <div class="commit-meta"><span class="hash">HEAD</span> · Oct 2024 – Present</div>
+        <div class="commit-title">Software Engineer</div>
+        <div class="commit-org">OLA Krutrim AI · Bengaluru, India</div>
+        <ul class="commit-body">
+          <li>Design, develop, and maintain <strong>Go-based backend services</strong> for a production cloud load-balancing platform — owning feature work, bug fixes, API enhancements, and production support.</li>
+          <li>Work with <strong>OpenStack</strong> (Octavia, Neutron, Nova) to support the control-plane and data-plane lifecycle of load balancers and related compute resources.</li>
+          <li>Contribute to enterprise load-balancer integrations as part of the broader cloud platform.</li>
+          <li>Build internal debugging dashboards and concurrent automation tooling in Go and Python to validate infrastructure state — up to <strong>20 parallel workers</strong>, cutting manual investigation time by roughly <strong>40%</strong>.</li>
+          <li>Work on listener and certificate-related reliability for the platform.</li>
+        </ul>
+        <div class="tag-row">
+          <span class="tag">Go</span><span class="tag">OpenStack</span><span class="tag">Kubernetes</span><span class="tag">Octavia</span><span class="tag">Neutron/Nova</span><span class="tag">F5 LTM</span>
+        </div>
+      </div>
+
+      <div class="commit">
+        <div class="commit-meta"><span class="hash">a3f1c9</span> · Mar 2024 – Oct 2024</div>
+        <div class="commit-title">Freelance Software Developer</div>
+        <div class="commit-org">Independent Freelance Engagement</div>
+        <ul class="commit-body">
+          <li>Delivered four core CRM workflows — <strong>drug inventory, billing, sales, and stock management</strong> — over a seven-month client engagement.</li>
+          <li>Translated client requirements into APIs, data models, and application features using JavaScript, Node.js, and Express.js, backed by MongoDB.</li>
+          <li>Tested and integrated backend functionality end-to-end with a React.js and Redux frontend.</li>
+        </ul>
+        <div class="tag-row">
+          <span class="tag">Node.js</span><span class="tag">Express.js</span><span class="tag">MongoDB</span><span class="tag">React.js</span><span class="tag">Redux</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STACK -->
+  <section id="stack" class="reveal">
+    <div class="section-head">
+      <div class="section-eyebrow">stack</div>
+      <h2>What I work with</h2>
+    </div>
+    <div class="panel-grid">
+      <div class="panel">
+        <div class="panel-title">Backend</div>
+        <ul>
+          <li>Go</li><li>Python</li><li>Java</li><li>REST APIs / Microservices</li><li>FastAPI · Gin</li><li>Swagger / Postman</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Cloud &amp; Infra</div>
+        <ul>
+          <li>OpenStack (Octavia, Nova)</li><li>Kubernetes</li><li>Docker</li><li>Kolla-Ansible</li><li>Load Balancing / F5</li><li>CI/CD</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Data &amp; Messaging</div>
+        <ul>
+          <li>MongoDB</li><li>MySQL / MariaDB</li><li>RabbitMQ</li><li>Kafka</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Frontend</div>
+        <ul>
+          <li>React.js</li><li>Redux</li><li>Next.js</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <div class="panel-title">AI &amp; Agents</div>
+        <ul>
+          <li>Ollama / local Llama models</li><li>AI Agents</li><li>FastAPI-based inference services</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Tooling</div>
+        <ul>
+          <li>Git</li><li>Linux</li><li>Postman</li><li>JUnit</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects" class="reveal">
+    <div class="section-head">
+      <div class="section-eyebrow">projects</div>
+      <h2>Featured work</h2>
+    </div>
+    <div class="project-list">
+      <div class="project case-study">
+        <div class="project-num">01</div>
+        <div>
+          <div class="project-title">Intelligent System Design Interview Simulator</div>
+          <div class="case-grid">
+            <div>
+              <div class="case-label">problem</div>
+              <div class="case-text">System design interview practice is hard to get without a
+              human on the other end — and local LLMs are a cheap, private way to fill that gap,
+              except their raw output is inconsistent free-form text, not something a UI can score.</div>
+              <div class="case-label">approach</div>
+              <div class="case-text">Built a FastAPI service around locally hosted Llama models via
+              Ollama, streaming interview dialogue in real time. Added a <strong>two-stage evaluation
+              pipeline</strong>: stage one lets the model reason freely about the candidate's answer,
+              stage two re-prompts it to convert that reasoning into structured, reliably-parseable
+              feedback — with retry/repair logic for the malformed JSON local models often produce.</div>
+              <div class="case-label">outcome</div>
+              <div class="case-text">A working end-to-end simulator: question generation, context-aware
+              follow-ups, and structured scoring — running entirely on local infrastructure with no
+              external API dependency.</div>
+            </div>
+            <div class="case-diagram-wrap">
+              <div class="lb-panel-head" style="margin-bottom:6px;">
+                <span>architecture</span>
+              </div>
+              <svg viewBox="0 0 260 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;">
+                <path d="M 60 40 L 60 70" stroke="#232b36" stroke-width="2"/>
+                <path d="M 60 100 L 60 130" stroke="#232b36" stroke-width="2"/>
+                <path d="M 60 160 L 60 190" stroke="#232b36" stroke-width="2"/>
+                <path d="M 60 220 L 60 250" stroke="#232b36" stroke-width="2"/>
+
+                <rect x="10" y="16" width="100" height="30" rx="4" fill="#161d26" stroke="#4fd1c5" stroke-width="1.3"/>
+                <text x="60" y="35" text-anchor="middle" font-family="IBM Plex Mono" font-size="9" fill="#e6ebf1">candidate</text>
+
+                <rect x="10" y="76" width="100" height="30" rx="4" fill="#161d26" stroke="#4fd1c5" stroke-width="1.3"/>
+                <text x="60" y="95" text-anchor="middle" font-family="IBM Plex Mono" font-size="9" fill="#e6ebf1">FastAPI</text>
+
+                <rect x="10" y="136" width="100" height="30" rx="4" fill="#161d26" stroke="#f0a868" stroke-width="1.3"/>
+                <text x="60" y="151" text-anchor="middle" font-family="IBM Plex Mono" font-size="8" fill="#e6ebf1">Ollama /</text>
+                <text x="60" y="161" text-anchor="middle" font-family="IBM Plex Mono" font-size="8" fill="#e6ebf1">Llama</text>
+
+                <rect x="10" y="196" width="100" height="30" rx="4" fill="#161d26" stroke="#f0a868" stroke-width="1.3"/>
+                <text x="60" y="211" text-anchor="middle" font-family="IBM Plex Mono" font-size="7.5" fill="#e6ebf1">eval: stage 1</text>
+                <text x="60" y="221" text-anchor="middle" font-family="IBM Plex Mono" font-size="7.5" fill="#e6ebf1">raw reasoning</text>
+
+                <rect x="10" y="256" width="100" height="34" rx="4" fill="#161d26" stroke="#4fd1c5" stroke-width="1.3"/>
+                <text x="60" y="271" text-anchor="middle" font-family="IBM Plex Mono" font-size="7.5" fill="#e6ebf1">eval: stage 2</text>
+                <text x="60" y="281" text-anchor="middle" font-family="IBM Plex Mono" font-size="7.5" fill="#e6ebf1">structured JSON</text>
+
+                <path d="M 110 91 C 160 91, 160 271, 118 271" stroke="#232b36" stroke-width="1.5" fill="none" stroke-dasharray="3 3"/>
+                <text x="200" y="60" font-family="IBM Plex Mono" font-size="7" fill="#5a6675">streamed</text>
+                <text x="200" y="70" font-family="IBM Plex Mono" font-size="7" fill="#5a6675">response</text>
+              </svg>
+            </div>
+          </div>
+          <div class="tag-row">
+            <span class="tag">Python</span><span class="tag">FastAPI</span><span class="tag">Ollama</span><span class="tag">Llama</span>
+          </div>
+        </div>
+      </div>
+      <div class="project">
+        <div class="project-num">02</div>
+        <div>
+          <div class="project-title">Scalable URL Shortener</div>
+          <div class="project-desc">A Java and Spring Boot URL-shortening service handling short-link
+          generation, redirection, expiry, and click analytics. Built with Redis caching for hot lookups,
+          MySQL for persistence, Docker for packaging, and JUnit for test coverage.</div>
+          <div class="tag-row">
+            <span class="tag">Java</span><span class="tag">Spring Boot</span><span class="tag">Redis</span><span class="tag">MySQL</span><span class="tag">Docker</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- APPROACH -->
+  <section class="reveal">
+    <div class="section-head">
+      <div class="section-eyebrow">principles</div>
+      <h2>How I approach systems</h2>
+    </div>
+    <div class="approach-grid">
+      <div class="approach-card">
+        <div class="approach-icon">01</div>
+        <div class="approach-title">Reliability</div>
+        <div class="approach-desc">Design for failure, and for graceful recovery when it happens anyway.</div>
+      </div>
+      <div class="approach-card">
+        <div class="approach-icon">02</div>
+        <div class="approach-title">Observability</div>
+        <div class="approach-desc">If it can't be debugged at 2am from a log line, it isn't finished.</div>
+      </div>
+      <div class="approach-card">
+        <div class="approach-icon">03</div>
+        <div class="approach-title">Scalability</div>
+        <div class="approach-desc">Think about how a service behaves under real traffic, not demo traffic.</div>
+      </div>
+      <div class="approach-card">
+        <div class="approach-icon">04</div>
+        <div class="approach-title">Ownership</div>
+        <div class="approach-desc">Understand a problem end-to-end instead of patching the symptom.</div>
+      </div>
+      <div class="approach-card">
+        <div class="approach-icon">05</div>
+        <div class="approach-title">Simplicity</div>
+        <div class="approach-desc">The practical fix beats the clever one, almost every time.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPLORING + EDUCATION -->
+  <section class="reveal">
+    <div class="two-col">
+      <div>
+        <div class="section-eyebrow">currently exploring</div>
+        <h2 style="margin-bottom:20px;">Currently exploring</h2>
+        <div class="chip-row">
+          <span class="chip">Distributed Systems Architecture</span>
+          <span class="chip">Workflow &amp; Runtime Systems</span>
+          <span class="chip">Multi-Agent Systems</span>
+          <span class="chip">Advanced Kubernetes</span>
+          <span class="chip">Platform Engineering</span>
+          <span class="chip">System Design</span>
+        </div>
+      </div>
+      <div>
+        <div class="section-eyebrow">education</div>
+        <h2 style="margin-bottom:20px;">Background</h2>
+        <div class="edu-card">
+          <div class="edu-degree">B.Tech, Information Technology</div>
+          <div class="edu-school">Adhiyamaan College of Engineering · 2020 – 2024</div>
+          <div class="edu-meta">
+            <span><strong>7.4</strong>/10 CGPA</span>
+            <span><strong>77%</strong> aggregate</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="contact-section reveal" style="border-top: 1px solid var(--line-soft);">
+    <div class="section-eyebrow" style="justify-content:center; display:flex;">connect()</div>
+    <h2>Building something reliable?</h2>
+    <p>Open to conversations on backend engineering, cloud platforms, distributed systems, and
+    infrastructure roles. I reply to email fastest.</p>
+    <div class="contact-links">
+      <a class="btn btn-primary" href="mailto:madhanannadurai536@gmail.com">madhanannadurai536@gmail.com</a>
+      <a class="btn btn-ghost" href="https://linkedin.com/in/madhankumar-a-324307222" target="_blank" rel="noopener">LinkedIn ↗</a>
+      <a class="btn btn-ghost" href="Madhankumar_A_Resume.pdf" download>Download résumé ↓</a>
+    </div>
+  </section>
+
+  <footer>
+    <span>© 2026 Madhankumar A</span>
+    <span>backend engineer · distributed systems · cloud infrastructure</span>
+  </footer>
+
+</div>
+
+<script>
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  revealEls.forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>
